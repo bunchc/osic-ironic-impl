@@ -202,10 +202,10 @@ Upload the created deploy images into glance
 .. code-block:: bash
 
     # Upload the deploy image kernel
-    glance image-create --name ironic-deploy.kernel --visibility public --disk-format aki --container-format aki < ironic-deploy.kernel
+    openstack --os-interface admin image create --public --disk-format aki --container-format aki ironic-deploy.kernel < ironic-deploy.kernel
 
     # Upload the user image initramfs
-    glance image-create --name ironic-deploy.initramfs --visibility public --disk-format ari --container-format ari < ironic-deploy.initramfs
+    openstack --os-interface admin image create --public --disk-format ari --container-format ari ironic-deploy.initramfs < ironic-deploy.initramfs
 
 
 Create Ubuntu user image
@@ -220,13 +220,13 @@ Upload the created user images into glance
 .. code-block:: bash
 
     # Upload the user image vmlinuz and store uuid
-    VMLINUZ_UUID="$(glance image-create --name ubuntu-user-image.vmlinuz --visibility public --disk-format aki --container-format aki  < ubuntu-user-image.vmlinuz | awk '/\| id/ {print $4}')"
+    VMLINUZ_UUID="$(openstack --os-interface admin image create --public --disk-format aki --container-format aki ubuntu-user-image.vmlinuz < ubuntu-user-image.vmlinuz | awk '/\| id/ {print $4}')"
 
     # Upload the user image initrd and store uuid
-    INITRD_UUID="$(glance image-create --name ubuntu-user-image.initrd --visibility public --disk-format ari --container-format ari  < ubuntu-user-image.initrd | awk '/\| id/ {print $4}')"
+    INITRD_UUID="$(openstack --os-interface admin image create --public --disk-format ari --container-format ari ubuntu-user-image.initrd < ubuntu-user-image.initrd | awk '/\| id/ {print $4}')"
 
     # Create image
-    glance image-create --name ubuntu-user-image --visibility public --disk-format qcow2 --container-format bare --property kernel_id=${VMLINUZ_UUID} --property ramdisk_id=${INITRD_UUID} < ubuntu-user-image.qcow2
+    openstack --os-interface admin image create --public --disk-format qcow2 --container-format bare --property kernel_id=${VMLINUZ_UUID} --property ramdisk_id=${INITRD_UUID} ubuntu-user-image < ubuntu-user-image.qcow2
 
 
 Creating an Ionic flavor
